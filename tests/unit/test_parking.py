@@ -2,7 +2,7 @@ import pytest
 
 from parking_controller.parking import Parking
 
-def tests_parking():
+def test_parking():
     ID = "tests"
     CAPACITY = 10 
 
