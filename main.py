@@ -1,9 +1,8 @@
 from queue import Queue
 from time import sleep
 from json import loads, dumps
-import paho.mqtt.client as mqtt
+from com.com_mqtt import Mqtt_Controller as mqtt_controller
 from parking_controller.controller import ParkingController
-
 
 input = Queue()
 output = Queue()
@@ -13,21 +12,8 @@ controller = ParkingController(
     output_queue=output,
 )
 
-def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
-    client.subscribe("EAFIT/PARKING_TEST/INPUT")
-
-
-def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
-    payload = loads(msg.payload)
-    input.put(payload)
-
-
-client = mqtt.Client()
-client.on_message = on_message
-client.on_connect = on_connect
-client.connect("broker.hivemq.com", 1883, 60)
+communication_controller = mqtt_controller(input)
+client = communication_controller.setup()
 
 while True:
     client.loop()
