@@ -14,7 +14,6 @@ def test_controller():
     test_controller = ParkingController(
         input_queue=input_queue,
         output_queue=output_queue,
-        repository=DummyRepository(),
     )
     
     assert test_controller.parkings == {}
