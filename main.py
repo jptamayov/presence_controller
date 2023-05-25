@@ -1,7 +1,7 @@
 from queue import Queue
 from time import sleep
 from json import loads, dumps
-from com.com_mqtt import Mqtt_Controller as mqtt_controller
+from com.com_mqtt import MqttController 
 from parking_controller.controller import ParkingController
 
 input = Queue()
@@ -12,15 +12,14 @@ controller = ParkingController(
     output_queue=output,
 )
 
-communication_controller = mqtt_controller(input)
-client = communication_controller.setup()
+communication_controller = MqttController(input, "broker.hivemq.com", 1883)
 
 while True:
-    client.loop()
+    communication_controller.loop()
     controller.loop()
 
     if not output.empty():
-        client.publish(
+        communication_controller.publish(
             topic="EAFIT/PARKING_TEST/OUTPUT", 
             payload=dumps(output.get())
         )
